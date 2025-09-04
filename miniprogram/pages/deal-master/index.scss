@@ -1,0 +1,235 @@
+/* 使用 Sass 变量增强可维护性 */
+$green: #16863a;
+$green-press: #0f6a2d;
+$bg: #f5f7f9;
+$text: #1a1a1a;
+$sub: #6b7280;
+$card: #ffffff;
+$border: #e5e7eb;
+$shadow: 0 6px 16px rgba(0,0,0,.06);
+
+.page {
+  margin: 0 auto;
+  padding: 12px 16px 20px;
+  background: $bg;
+  // max-width 由运行时注入 style
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0 8px;
+  .status-holder { height: 0; }
+  .title {
+    font-weight: 700;
+    font-size: 18px;
+    color: $text;
+    line-height: 24px;
+  }
+  .avatar {
+    position: absolute;
+    right: 0;
+    top: 4px;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: #ddd;
+  }
+}
+
+.section {
+  background: $card;
+  border-radius: 14px;
+  box-shadow: $shadow;
+  padding: 14px;
+  margin: 10px 0 14px;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #111827;
+  font-weight: 600;
+  margin-bottom: 10px;
+  .icon {
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    color: $green;
+    border-radius: 6px;
+    background: rgba(22,134,58,0.08);
+  }
+}
+
+.btn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+
+  .seg-btn {
+    height: 44px;
+    border-radius: 10px;
+    background: #f3f4f6;
+    border: 1px solid $border;
+    color: #111827;
+    font-weight: 600;
+    &.active {
+      background: $green;
+      color: #fff;
+      border-color: $green;
+    }
+    &:active {
+      filter: brightness(0.98);
+    }
+  }
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 2px;
+
+  .label {
+    color: #111827;
+    font-weight: 600;
+  }
+
+  &.spaced {
+    margin-top: 2px;
+  }
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  .step-btn {
+    width: 44px;
+    height: 36px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    border: 1px solid $border;
+    font-size: 18px;
+    color: #111827;
+    &:disabled {
+      opacity: .5;
+    }
+  }
+
+  .step-value {
+    width: 36px;
+    text-align: center;
+    font-weight: 700;
+    color: $green;
+  }
+}
+
+.radio-group {
+  padding: 4px 2px 0;
+  .radio-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+  }
+  .radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    border: 2px solid #c0c6d1;
+    position: relative;
+    &.checked {
+      border-color: $green;
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 3px;
+        border-radius: 999px;
+        background: $green;
+      }
+    }
+    &.hollow:not(.checked) {
+      border-color: #c0c6d1;
+    }
+  }
+  .radio-texts {
+    display: flex;
+    flex-direction: column;
+    .radio-title {
+      font-weight: 600;
+      color: #111827;
+      line-height: 20px;
+    }
+    .radio-sub {
+      font-size: 12px;
+      color: $sub;
+    }
+  }
+}
+
+.divider {
+  height: 1px;
+  background: $border;
+  margin: 6px 0 4px;
+}
+
+.seg-yesno {
+  display: inline-flex;
+  gap: 8px;
+
+  .seg.small {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid $border;
+    background: #f3f4f6;
+    color: #111827;
+    font-weight: 600;
+
+    &.active {
+      background: $green;
+      color: #fff;
+      border-color: $green;
+    }
+  }
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  padding: 6px 0 10px;
+  background: transparent;
+  .primary {
+    height: 48px;
+    border-radius: 999px;
+    background: $green;
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 8px 18px rgba(22,134,58,.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    &:active { background: $green-press; }
+  }
+  .btn-icon { font-size: 18px; }
+}
+
+/* 让 button 看起来更像纯容器 */
+button {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  border: none;
+  background: transparent;
+}

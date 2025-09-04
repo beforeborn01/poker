@@ -1,0 +1,90 @@
+<view class="page" style="max-width: {{maxWidth}}px;">
+  <!-- 顶部标题栏 -->
+  <view class="header">
+    <view class="status-holder"></view>
+    <view class="title">扑克牌大师</view>
+    <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+  </view>
+
+  <!-- 牌组配置 -->
+  <view class="card section">
+    <view class="section-title">
+      <text class="icon icon-deck">🃏</text>
+      <text>牌组配置</text>
+    </view>
+    <view class="btn-grid">
+      <button class="seg-btn {{deckCount===1?'active':''}}" bindtap="onDeckCount" data-val="1">1副牌</button>
+      <button class="seg-btn {{deckCount===2?'active':''}}" bindtap="onDeckCount" data-val="2">2副牌</button>
+      <button class="seg-btn {{includeJokers?'active':''}}" bindtap="toggleJokers">包含大小王</button>
+      <button class="seg-btn {{!includeJokers?'active':''}}" bindtap="toggleJokers">不包含大小王</button>
+    </view>
+  </view>
+
+  <!-- 玩家设置 -->
+  <view class="card section">
+    <view class="section-title">
+      <text class="icon icon-user">👥</text>
+      <text>玩家设置</text>
+    </view>
+    <view class="row">
+      <text class="label">玩家数：</text>
+      <view class="stepper">
+        <button class="step-btn" bindtap="decPlayers" disabled="{{playerCount<=2}}">－</button>
+        <text class="step-value">{{playerCount}}</text>
+        <button class="step-btn" bindtap="incPlayers" disabled="{{playerCount>=12}}">＋</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 发牌配置 -->
+  <view class="card section">
+    <view class="section-title">
+      <text class="icon icon-target">🎯</text>
+      <text>发牌配置</text>
+    </view>
+
+    <view class="radio-group">
+      <view class="radio-row" bindtap="setDealMode" data-mode="round">
+        <view class="radio {{dealMode==='round'?'checked':''}}"></view>
+        <view class="radio-texts">
+          <text class="radio-title">循环发牌</text>
+          <text class="radio-sub">每次发牌给一个玩家</text>
+        </view>
+      </view>
+      <view class="radio-row" bindtap="setDealMode" data-mode="simultaneous">
+        <view class="radio {{dealMode==='simultaneous'?'checked':''}} hollow"></view>
+        <view class="radio-texts">
+          <text class="radio-title">同时发牌</text>
+          <text class="radio-sub">每次发牌给所有玩家</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="row spaced">
+      <text class="label">每次发牌张数：</text>
+      <view class="stepper">
+        <button class="step-btn" bindtap="decPerTime" disabled="{{perTime<=1}}">－</button>
+        <text class="step-value">{{perTime}}</text>
+        <button class="step-btn" bindtap="incPerTime" disabled="{{perTime>=10}}">＋</button>
+      </view>
+    </view>
+
+    <view class="row spaced">
+      <text class="label">每次发牌后重新洗牌</text>
+      <view class="seg-yesno">
+        <button class="seg small {{reshuffle? 'active':''}}" bindtap="setReshuffle" data-val="1">是</button>
+        <button class="seg small {{!reshuffle? 'active':''}}" bindtap="setReshuffle" data-val="0">否</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="footer">
+    <button class="primary" bindtap="startGame" loading="{{loading}}">
+      <text class="btn-icon">🃏</text>
+      开始游戏
+    </button>
+  </view>
+</view>

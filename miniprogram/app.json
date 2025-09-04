@@ -1,0 +1,14 @@
+{
+    "pages": [
+      "pages/deal-master/index"
+    ],
+    "window": {
+      "navigationBarTitleText": "扑克牌大师",
+      "navigationBarBackgroundColor": "#ffffff",
+      "navigationBarTextStyle": "black",
+      "backgroundColor": "#f5f7f9",
+      "backgroundTextStyle": "dark"
+    },
+    "style": "v2",
+    "sitemapLocation": "sitemap.json"
+  }
