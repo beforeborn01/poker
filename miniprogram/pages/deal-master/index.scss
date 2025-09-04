@@ -1,7 +1,7 @@
 /* 使用 Sass 变量增强可维护性 */
 $green: #16863a;
 $green-press: #0f6a2d;
-$bg: #f5f7f9;
+$bg: #ffffff;
 $text: #1a1a1a;
 $sub: #6b7280;
 $card: #ffffff;
@@ -10,11 +10,16 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
 
 .page {
   margin: 0 auto;
-  padding: 12px 16px 20px;
+  padding: calc(12px * var(--scale, 1)) calc(16px * var(--scale, 1)) calc(88px * var(--scale, 1));
   background: $bg;
   // max-width 由运行时注入 style
   box-sizing: border-box;
   min-height: 100vh;
+  // 宽屏策略：≥500 时增大左右留白但保持单列
+  @media (min-width: 500px) {
+    padding-left: calc(24px * var(--scale, 1));
+    padding-right: calc(24px * var(--scale, 1));
+  }
 }
 
 .header {
@@ -22,11 +27,12 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 0 8px;
+  padding: calc(12px * var(--scale, 1)) 0 calc(8px * var(--scale, 1));
+  padding-top: calc(env(safe-area-inset-top) + 12px);
   .status-holder { height: 0; }
   .title {
     font-weight: 700;
-    font-size: 18px;
+    font-size: calc(18px * var(--scale, 1));
     color: $text;
     line-height: 24px;
   }
@@ -34,8 +40,8 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
     position: absolute;
     right: 0;
     top: 4px;
-    width: 36px;
-    height: 36px;
+    width: calc(36px * var(--scale, 1));
+    height: calc(36px * var(--scale, 1));
     border-radius: 999px;
     background: #ddd;
   }
@@ -45,42 +51,58 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
   background: $card;
   border-radius: 14px;
   box-shadow: $shadow;
-  padding: 14px;
-  margin: 10px 0 14px;
+  padding: calc(14px * var(--scale, 1));
+  margin: calc(10px * var(--scale, 1)) 0 calc(14px * var(--scale, 1));
   border: 1px solid rgba(0,0,0,0.04);
 }
 
 .section-title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: calc(8px * var(--scale, 1));
   color: #111827;
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-weight: 700;
+  margin-bottom: calc(10px * var(--scale, 1));
   .icon {
     display: inline-flex;
-    width: 20px;
-    height: 20px;
+    width: calc(20px * var(--scale, 1));
+    height: calc(20px * var(--scale, 1));
     align-items: center;
     justify-content: center;
     color: $green;
     border-radius: 6px;
     background: rgba(22,134,58,0.08);
+    font-size: calc(14px * var(--scale, 1));
+    line-height: 1;
   }
 }
 
 .btn-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(8px * var(--scale, 1));
+  width: 100%;
+  box-sizing: border-box;
 
   .seg-btn {
-    height: 44px;
+    height: calc(40px * var(--scale, 1));
     border-radius: 10px;
     background: #f3f4f6;
     border: 1px solid $border;
     color: #111827;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    white-space: nowrap;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 calc(6px * var(--scale, 1));
+    font-size: calc(14px * var(--scale, 1));
     &.active {
       background: $green;
       color: #fff;
@@ -96,55 +118,61 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 2px;
+  padding: calc(6px * var(--scale, 1)) calc(2px * var(--scale, 1));
+  gap: calc(8px * var(--scale, 1));
 
   .label {
     color: #111827;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   &.spaced {
-    margin-top: 2px;
+    margin-top: calc(2px * var(--scale, 1));
   }
 }
 
 .stepper {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: calc(8px * var(--scale, 1));
 
   .step-btn {
-    width: 44px;
-    height: 36px;
+    width: calc(44px * var(--scale, 1));
+    height: calc(36px * var(--scale, 1));
     border-radius: 8px;
     background: #f3f4f6;
     border: 1px solid $border;
-    font-size: 18px;
+    font-size: calc(18px * var(--scale, 1));
     color: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-weight: 700;
     &:disabled {
       opacity: .5;
     }
   }
 
   .step-value {
-    width: 36px;
+    width: calc(36px * var(--scale, 1));
     text-align: center;
-    font-weight: 700;
+    font-weight: 400;
     color: $green;
   }
 }
 
 .radio-group {
-  padding: 4px 2px 0;
+  padding: calc(4px * var(--scale, 1)) calc(2px * var(--scale, 1)) 0;
   .radio-row {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 0;
+    gap: calc(10px * var(--scale, 1));
+    padding: calc(8px * var(--scale, 1)) 0;
   }
   .radio {
-    width: 18px;
-    height: 18px;
+    width: calc(18px * var(--scale, 1));
+    height: calc(18px * var(--scale, 1));
     border-radius: 999px;
     border: 2px solid #c0c6d1;
     position: relative;
@@ -153,7 +181,7 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
       &::after {
         content: "";
         position: absolute;
-        inset: 3px;
+        inset: calc(3px * var(--scale, 1));
         border-radius: 999px;
         background: $green;
       }
@@ -166,12 +194,12 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
     display: flex;
     flex-direction: column;
     .radio-title {
-      font-weight: 600;
+      font-weight: 400;
       color: #111827;
-      line-height: 20px;
+      line-height: calc(20px * var(--scale, 1));
     }
     .radio-sub {
-      font-size: 12px;
+      font-size: calc(12px * var(--scale, 1));
       color: $sub;
     }
   }
@@ -180,21 +208,28 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
 .divider {
   height: 1px;
   background: $border;
-  margin: 6px 0 4px;
+  margin: calc(12px * var(--scale, 1)) 0 calc(12px * var(--scale, 1));
 }
 
 .seg-yesno {
   display: inline-flex;
-  gap: 8px;
+  gap: calc(8px * var(--scale, 1));
 
   .seg.small {
-    height: 36px;
-    padding: 0 14px;
+    height: calc(36px * var(--scale, 1));
+    padding: 0 calc(14px * var(--scale, 1));
+    width: auto; // 覆盖 button 默认 100% 宽
+    min-width: calc(44px * var(--scale, 1));
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
     border-radius: 8px;
     border: 1px solid $border;
     background: #f3f4f6;
     color: #111827;
-    font-weight: 600;
+    font-weight: 400;
 
     &.active {
       background: $green;
@@ -207,10 +242,11 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
 .footer {
   position: sticky;
   bottom: 0;
-  padding: 6px 0 10px;
+  padding: calc(6px * var(--scale, 1)) 0 calc(10px * var(--scale, 1));
+  padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
   background: transparent;
   .primary {
-    height: 48px;
+    height: calc(48px * var(--scale, 1));
     border-radius: 999px;
     background: $green;
     color: #fff;
@@ -219,10 +255,10 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: calc(6px * var(--scale, 1));
     &:active { background: $green-press; }
   }
-  .btn-icon { font-size: 18px; }
+  .btn-icon { font-size: calc(18px * var(--scale, 1)); }
 }
 
 /* 让 button 看起来更像纯容器 */
