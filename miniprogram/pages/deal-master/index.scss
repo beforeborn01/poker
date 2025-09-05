@@ -51,8 +51,8 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
   background: $card;
   border-radius: 14px;
   box-shadow: $shadow;
-  padding: calc(14px * var(--scale, 1));
-  margin: calc(10px * var(--scale, 1)) 0 calc(14px * var(--scale, 1));
+  padding: calc(18px * var(--scale, 1));
+  margin: calc(16px * var(--scale, 1)) 0 calc(20px * var(--scale, 1));
   border: 1px solid rgba(0,0,0,0.04);
 }
 
@@ -62,7 +62,7 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
   gap: calc(8px * var(--scale, 1));
   color: #111827;
   font-weight: 700;
-  margin-bottom: calc(10px * var(--scale, 1));
+  margin-bottom: calc(16px * var(--scale, 1));
   .icon {
     display: inline-flex;
     width: calc(20px * var(--scale, 1));
@@ -80,7 +80,7 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
 .btn-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: calc(8px * var(--scale, 1));
+  gap: calc(12px * var(--scale, 1));
   width: 100%;
   box-sizing: border-box;
 
@@ -118,8 +118,8 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: calc(6px * var(--scale, 1)) calc(2px * var(--scale, 1));
-  gap: calc(8px * var(--scale, 1));
+  padding: calc(10px * var(--scale, 1)) calc(2px * var(--scale, 1));
+  gap: calc(12px * var(--scale, 1));
 
   .label {
     color: #111827;
@@ -127,7 +127,7 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
   }
 
   &.spaced {
-    margin-top: calc(2px * var(--scale, 1));
+    margin-top: calc(8px * var(--scale, 1));
   }
 }
 
@@ -163,12 +163,12 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
 }
 
 .radio-group {
-  padding: calc(4px * var(--scale, 1)) calc(2px * var(--scale, 1)) 0;
+  padding: calc(8px * var(--scale, 1)) calc(2px * var(--scale, 1)) 0;
   .radio-row {
     display: flex;
     align-items: center;
-    gap: calc(10px * var(--scale, 1));
-    padding: calc(8px * var(--scale, 1)) 0;
+    gap: calc(12px * var(--scale, 1));
+    padding: calc(12px * var(--scale, 1)) 0;
   }
   .radio {
     width: calc(18px * var(--scale, 1));
@@ -208,7 +208,7 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
 .divider {
   height: 1px;
   background: $border;
-  margin: calc(12px * var(--scale, 1)) 0 calc(12px * var(--scale, 1));
+  margin: calc(16px * var(--scale, 1)) 0 calc(16px * var(--scale, 1));
 }
 
 .seg-yesno {

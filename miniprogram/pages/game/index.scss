@@ -51,6 +51,21 @@ $text: #1a1a1a;
   .suit.red, .rank.red { color: #e02424; }
 }
 
+.card.face .corner { position: absolute; left: 6px; top: 0; display: flex; align-items: center; gap: 4px; }
+.card.face .corner.br { right: 6px; bottom: 0; left: auto; top: auto; justify-content: flex-end; }
+
+/* 全局红色角标，适用于弹层与玩家区域 */
+.suit.red, .rank.red { color: #e02424; }
+.rank.joker { font-size: 12px; }
+
+.modal-mask { position: fixed; left:0; top:0; right:0; bottom:0; background: rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; z-index: 999; }
+.modal.large { width: 86%; background: #fff; border-radius: 12px; padding: 16px; }
+.modal-title { font-weight: 700; margin-bottom: 10px; }
+.pile-view { position: relative; height: 60vh; overflow-y: auto; margin-top: 8px; }
+.modal .card.face { position: absolute; left: 50%; transform: translateX(-50%); width: 90px; height: 120px; border: 1px solid $border; background: #fff; border-radius: 8px; box-shadow: 0 6px 14px rgba(0,0,0,.12); padding: 0 6px 6px 6px; }
+.modal-actions { display:flex; justify-content:center; margin-top: 12px; }
+.btn.primary { background: $green; color:#fff; border-radius: 999px; padding: 8px 16px; }
+
 .player.top { display: flex; flex-direction: column; align-items: center; }
 .player.bottom { display: flex; flex-direction: column; align-items: center; }
 .player.bottom .name { margin-bottom: 4px; }

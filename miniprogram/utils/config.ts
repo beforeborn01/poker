@@ -23,7 +23,7 @@ const DEFAULT_CONFIG: DealConfig = {
 };
 
 function sanitize(cfg: Partial<DealConfig>): DealConfig {
-  const player = Math.min(12, Math.max(2, Number(cfg.playerCount ?? DEFAULT_CONFIG.playerCount)));
+  const player = Math.min(12, Math.max(1, Number(cfg.playerCount ?? DEFAULT_CONFIG.playerCount)));
   const per = Math.min(10, Math.max(1, Number(cfg.perTime ?? DEFAULT_CONFIG.perTime)));
   const deck = (cfg.deckCount === 2 ? 2 : 1) as 1 | 2;
   const mode: DealMode = cfg.dealMode === 'simultaneous' ? 'simultaneous' : 'round';

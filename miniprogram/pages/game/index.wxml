@@ -13,18 +13,18 @@
 
     <!-- 玩家与历史堆渲染 -->
     <block wx:for="{{players}}" wx:key="index">
-      <view class="player {{item.anchor}}" style="left: {{item.x}}%; top: {{item.y}}%; transform: translate(-50%, -50%);">
+      <view class="player {{item.anchor}}" style="left: {{item.x}}%; top: {{item.y}}%; transform: translate(-50%, -50%) scale({{cardScale}}); transform-origin: center;">
         <view class="name">{{item.name}}</view>
-        <view class="pile small">
-          <block wx:for="{{item.pile}}" wx:key="index">
+        <view class="pile small" data-idx="{{index}}" catchtap="openPile">
+          <block wx:for="{{item.pileLimited || item.pile}}" wx:key="index">
             <view class="card face {{index===0 ? 'top' : ''}}" style="z-index: {{100-index}}; top: {{index * expose}}rpx;">
               <view class="corner" style="height: {{cornerH}}rpx; line-height: {{cornerH}}rpx;">
-                <text class="suit {{(item.suit==='♥'||item.suit==='♦') ? 'red' : ''}}">{{item.suit}}</text>
-                <text class="rank {{(item.suit==='♥'||item.suit==='♦') ? 'red' : ''}}">{{item.rank}}</text>
+                <text class="suit {{(item.suit==='♥'||item.suit==='♦'||(item.suit==='JOKER' && item.rank==='BIG')) ? 'red' : ''}}">{{item.suit==='JOKER' ? '' : item.suit}}</text>
+                <text class="rank {{(item.suit==='♥'||item.suit==='♦'||(item.suit==='JOKER' && item.rank==='BIG')) ? 'red' : ''}} {{item.suit==='JOKER' ? 'joker' : ''}}">{{item.suit==='JOKER' ? (item.rank==='BIG' ? '大王' : '小王') : item.rank}}</text>
               </view>
               <view class="corner br" style="height: {{cornerH}}rpx; line-height: {{cornerH}}rpx;">
-                <text class="suit {{(item.suit==='♥'||item.suit==='♦') ? 'red' : ''}}">{{item.suit}}</text>
-                <text class="rank {{(item.suit==='♥'||item.suit==='♦') ? 'red' : ''}}">{{item.rank}}</text>
+                <text class="suit {{(item.suit==='♥'||item.suit==='♦'||(item.suit==='JOKER' && item.rank==='BIG')) ? 'red' : ''}}">{{item.suit==='JOKER' ? '' : item.suit}}</text>
+                <text class="rank {{(item.suit==='♥'||item.suit==='♦'||(item.suit==='JOKER' && item.rank==='BIG')) ? 'red' : ''}} {{item.suit==='JOKER' ? 'joker' : ''}}">{{item.suit==='JOKER' ? (item.rank==='BIG' ? '大王' : '小王') : item.rank}}</text>
               </view>
             </view>
           </block>
@@ -36,6 +36,30 @@
   <view class="footer-row">
     <button class="secondary" bindtap="resetGame">重置对局</button>
     <button class="primary" bindtap="backToSetup">返回配置</button>
+  </view>
+
+  <!-- 放大查看某玩家历史堆 -->
+  <view wx:if="{{showPileModal}}" class="modal-mask" catchtouchmove="true">
+    <view class="modal large">
+      <view class="modal-title">{{focusPlayer.name}} 的历史牌堆</view>
+      <view class="pile-view">
+        <block wx:for="{{focusPlayer.pile}}" wx:key="index" wx:for-item="card">
+          <view class="card face" style="z-index: {{200-index}}; top: {{index * (cornerH + 2)}}rpx;">
+            <view class="corner" style="height: {{cornerH}}rpx; line-height: {{cornerH}}rpx;">
+              <text class="suit {{(card.suit==='♥'||card.suit==='♦'||(card.suit==='JOKER' && card.rank==='BIG')) ? 'red' : ''}}">{{card.suit==='JOKER' ? '' : card.suit}}</text>
+              <text class="rank {{(card.suit==='♥'||card.suit==='♦'||(card.suit==='JOKER' && card.rank==='BIG')) ? 'red' : ''}} {{card.suit==='JOKER' ? 'joker' : ''}}">{{card.suit==='JOKER' ? (card.rank==='BIG' ? '大王' : '小王') : card.rank}}</text>
+            </view>
+            <view class="corner br" style="height: {{cornerH}}rpx; line-height: {{cornerH}}rpx;">
+              <text class="suit {{(card.suit==='♥'||card.suit==='♦'||(card.suit==='JOKER' && card.rank==='BIG')) ? 'red' : ''}}">{{card.suit==='JOKER' ? '' : card.suit}}</text>
+              <text class="rank {{(card.suit==='♥'||card.suit==='♦'||(card.suit==='JOKER' && card.rank==='BIG')) ? 'red' : ''}} {{card.suit==='JOKER' ? 'joker' : ''}}">{{card.suit==='JOKER' ? (card.rank==='BIG' ? '大王' : '小王') : card.rank}}</text>
+            </view>
+          </view>
+        </block>
+      </view>
+      <view class="modal-actions">
+        <button class="btn primary" bindtap="closePile">关闭</button>
+      </view>
+    </view>
   </view>
 </view>
 

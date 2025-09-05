@@ -29,9 +29,9 @@
     <view class="row">
       <text class="label">玩家数：</text>
       <view class="stepper">
-        <button class="step-btn" bindtap="decPlayers" disabled="{{playerCount<=2}}">－</button>
+        <button class="step-btn" bindtap="decPlayers" disabled="{{playerCount<=1}}">－</button>
         <text class="step-value">{{playerCount}}</text>
-        <button class="step-btn" bindtap="incPlayers" disabled="{{playerCount>=12}}">＋</button>
+        <button class="step-btn" bindtap="incPlayers" disabled="{{playerCount>=8}}">＋</button>
       </view>
     </view>
   </view>
@@ -71,9 +71,7 @@
       </view>
     </view>
 
-    <view class="divider"></view>
-
-    <view class="row spaced">
+    <view class="row spaced" wx:if="{{false}}">
       <text class="label">每次发牌后重新洗牌</text>
       <view class="seg-yesno">
         <button class="seg small {{reshuffle? 'active':''}}" bindtap="setReshuffle" data-val="1">是</button>

@@ -6,6 +6,7 @@ interface Card { suit: Suit; rank: string; }
 interface PlayerState {
   name: string;
   pile: Card[];
+  pileLimited?: Card[];
   x: number; // percent left
   y: number; // percent top
   anchor: 'top' | 'bottom' | 'middle';
@@ -22,6 +23,9 @@ interface IData {
   cardBack: string;
   expose: number; // 每张历史牌堆露出的高度（rpx）
   cornerH: number; // 牌面角标高度（rpx）
+  showPileModal?: boolean;
+  focusPlayer?: { name: string; pile: Card[] };
+  cardScale: number; // 玩家区域卡片缩放
 }
 
 const STORAGE_KEY = 'deal-game-state:v1';
@@ -31,7 +35,7 @@ function buildDeck(cfg: DealConfig): Card[] {
   const suits: Suit[] = ['♠','♥','♣','♦'];
   const one: Card[] = [];
   for (const s of suits) for (const r of ranks) one.push({ suit: s, rank: r });
-  if (cfg.includeJokers) { one.push({ suit: 'JOKER', rank: 'J' }); one.push({ suit: 'JOKER', rank: 'j' }); }
+  if (cfg.includeJokers) { one.push({ suit: 'JOKER', rank: 'BIG' }); one.push({ suit: 'JOKER', rank: 'LITTLE' }); }
   let deck: Card[] = [];
   for (let i=0;i<cfg.deckCount;i++) deck = deck.concat(one);
   // 洗牌
@@ -45,7 +49,7 @@ function buildDeck(cfg: DealConfig): Card[] {
 function layoutFor(count: number): Array<{x:number,y:number}> {
   // 预设布局（百分比）。中心(50,50)留发牌区
   switch (count) {
-    case 1: return [];
+    case 1: return [{x:50,y:18}];
     case 2: return [{x:50,y:18},{x:50,y:82}];
     case 3: return [{x:50,y:18},{x:12,y:78},{x:88,y:78}];
     case 4: return [{x:50,y:15},{x:88,y:50},{x:50,y:78},{x:12,y:50}];
@@ -87,7 +91,8 @@ Page<IData, any>({
     currentIndex: 0,
     cardBack: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="420"><rect width="100%" height="100%" rx="20" ry="20" fill="%2316863a"/><circle cx="150" cy="210" r="120" fill="none" stroke="%23fff" stroke-width="8"/></svg>',
     expose: 8,
-    cornerH: 30
+    cornerH: 30,
+    cardScale: 1
   },
 
   onLoad() {
@@ -97,8 +102,22 @@ Page<IData, any>({
     const cfg = getConfig();
 
     const restored = restoreState();
-    if (restored && restored.players && Array.isArray(restored.players) && restored.deck) {
-      this.setData({ maxWidth, scale, cfg, deck: restored.deck, remain: restored.remain, players: restored.players, currentIndex: restored.currentIndex });
+    const sameRule = restored && restored.cfg && (
+      restored.cfg.deckCount === cfg.deckCount &&
+      restored.cfg.includeJokers === cfg.includeJokers &&
+      restored.cfg.playerCount === cfg.playerCount &&
+      restored.cfg.dealMode === cfg.dealMode &&
+      restored.cfg.perTime === cfg.perTime &&
+      restored.cfg.reshuffle === cfg.reshuffle
+    );
+    if (sameRule && restored.players && Array.isArray(restored.players) && restored.deck) {
+      const restoredPlayers: PlayerState[] = (restored.players as any[]).map((p: any) => ({
+        name: p.name,
+        pile: p.pile || [],
+        pileLimited: (p.pile || []).slice(0, 10),
+        x: p.x, y: p.y, anchor: p.anchor
+      }));
+      this.setData({ maxWidth, scale, cfg, deck: restored.deck as Card[], remain: restored.remain as number, players: restoredPlayers, currentIndex: restored.currentIndex as number });
       return;
     }
 
@@ -107,6 +126,7 @@ Page<IData, any>({
     const players: PlayerState[] = positions.map((p: {x:number;y:number}, i: number): PlayerState => ({
       name: `玩家${i+1}`,
       pile: [],
+      pileLimited: [],
       x: p.x,
       y: p.y,
       // 顶部与中部：名称在上、堆在下；底部：名称在上、堆在下（避免覆盖）
@@ -116,7 +136,8 @@ Page<IData, any>({
     let expose = this.data.expose;
     if (cfg.playerCount >= 6) { expose = 8; }
     if (cfg.playerCount >= 7) { expose = 6; }
-    this.setData({ maxWidth, scale, cfg, deck, remain: deck.length, players, currentIndex: 0, expose });
+    const cardScale = cfg.playerCount >= 7 ? 0.8 : 1; // 7/8 人缩到 80%
+    this.setData({ maxWidth, scale, cfg, deck, remain: deck.length, players, currentIndex: 0, expose, cardScale });
     saveState(this.data);
   },
 
@@ -141,6 +162,17 @@ Page<IData, any>({
     saveState(this.data);
   },
 
+  openPile(e: WechatMiniprogram.TouchEvent) {
+    const idx = Number((e.currentTarget.dataset as any).idx || 0);
+    const p = this.data.players[idx];
+    if (!p) return;
+    this.setData({ showPileModal: true, focusPlayer: { name: p.name, pile: p.pile } });
+  },
+
+  closePile() {
+    this.setData({ showPileModal: false });
+  },
+
   dealRound(per: number) {
     let deck = [...this.data.deck];
     const players = this.data.players.map((p: PlayerState) => ({ ...p }));
@@ -148,7 +180,8 @@ Page<IData, any>({
     for (let i = 0; i < per; i++) {
       if (deck.length === 0) break;
       const card = deck.pop() as Card;
-      players[idx].pile = [card, ...players[idx].pile];
+      players[idx].pile = [card, ...(players[idx].pile || [])];
+      players[idx].pileLimited = players[idx].pile.slice(0, 10);
     }
     idx = (idx + 1) % players.length;
     this.setData({ deck, remain: deck.length, players, currentIndex: idx });
@@ -161,7 +194,8 @@ Page<IData, any>({
       for (let i = 0; i < players.length; i++) {
         if (deck.length === 0) break;
         const card = deck.pop() as Card;
-        players[i].pile = [card, ...players[i].pile];
+        players[i].pile = [card, ...(players[i].pile || [])];
+        players[i].pileLimited = players[i].pile.slice(0, 10);
       }
     }
     this.setData({ deck, remain: deck.length, players });
@@ -174,6 +208,7 @@ Page<IData, any>({
     const players: PlayerState[] = positions.map((p: {x:number;y:number}, i: number): PlayerState => ({
       name: `玩家${i+1}`,
       pile: [],
+      pileLimited: [],
       x: p.x,
       y: p.y,
       anchor: p.y > 60 ? 'bottom' : 'top'

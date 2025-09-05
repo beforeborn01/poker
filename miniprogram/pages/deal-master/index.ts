@@ -79,7 +79,7 @@ interface IData {
     },
   
     decPlayers() {
-      const v = Math.max(this.data.playerCount - 1, 2);
+      const v = Math.max(this.data.playerCount - 1, 1);
       this.setData({ playerCount: v }, this.saveConfig);
     },
   
