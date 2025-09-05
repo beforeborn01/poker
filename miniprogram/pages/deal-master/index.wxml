@@ -2,8 +2,7 @@
   <!-- 顶部标题栏 -->
   <view class="header">
     <view class="status-holder"></view>
-    <view class="title">扑克牌大师</view>
-    <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+    <view class="title">扑克大师</view>
   </view>
 
   <!-- 牌组配置 -->

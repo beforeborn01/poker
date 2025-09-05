@@ -10,7 +10,6 @@ interface IData {
     perTime: number;
     reshuffle: boolean;
     loading: boolean;
-    avatarUrl: string;
     showRuleChangeModal?: boolean;
     skipRuleChange?: boolean;
   }
@@ -40,7 +39,6 @@ interface IData {
       perTime: 1,
       reshuffle: false,
       loading: false,
-      avatarUrl: 'https://dummyimage.com/120x120/eeeeee/333333&text=%F0%9F%91%A8', // 占位头像，可替换
       showRuleChangeModal: false,
       skipRuleChange: false
     },

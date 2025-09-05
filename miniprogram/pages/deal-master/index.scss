@@ -36,15 +36,6 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
     color: $text;
     line-height: 24px;
   }
-  .avatar {
-    position: absolute;
-    right: 0;
-    top: 4px;
-    width: calc(36px * var(--scale, 1));
-    height: calc(36px * var(--scale, 1));
-    border-radius: 999px;
-    background: #ddd;
-  }
 }
 
 .section {
