@@ -62,10 +62,20 @@ export function clearConfig() {
 export const ConfigStorage = { getConfig, setConfig, clearConfig };
 
 export function getSkipRuleChangeTip(): boolean {
-  try { return Boolean(wx.getStorageSync(TIP_KEY)); } catch { return false; }
+  try { 
+    const value = wx.getStorageSync(TIP_KEY);
+    return value === '1' || value === true;
+  } catch { 
+    return false; 
+  }
 }
 export function setSkipRuleChangeTip(skip: boolean) {
-  try { wx.setStorageSync(TIP_KEY, skip ? '1' : ''); } catch {}
+  try { 
+    const value = skip ? '1' : '';
+    wx.setStorageSync(TIP_KEY, value);
+  } catch (e) {
+    // 静默处理存储错误
+  }
 }
 
 

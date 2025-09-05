@@ -53,7 +53,7 @@ function layoutFor(count: number): Array<{x:number,y:number}> {
   switch (count) {
     case 1: return [{x:50,y:18}];
     case 2: return [{x:50,y:18},{x:50,y:82}];
-    case 3: return [{x:50,y:18},{x:12,y:78},{x:88,y:78}];
+    case 3: return [{x:50,y:18},{x:88,y:78},{x:12,y:78}];
     case 4: return [{x:50,y:15},{x:88,y:50},{x:50,y:78},{x:12,y:50}];
     case 5: return [{x:50,y:12},{x:88,y:40},{x:70,y:78},{x:30,y:78},{x:12,y:40}];
     case 6: return [{x:50,y:12},{x:88,y:28},{x:88,y:60},{x:50,y:78},{x:12,y:60},{x:12,y:28}];

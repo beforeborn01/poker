@@ -266,7 +266,43 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
 .modal { width: 76%; background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
 .modal-title { font-weight: 700; font-size: 16px; margin-bottom: 8px; }
 .modal-content { color: #111827; margin-bottom: 12px; }
-.checkbox-row { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+.checkbox-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  margin-bottom: 12px; 
+  cursor: pointer;
+  
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #c0c6d1;
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.2s;
+    
+    &.checked {
+      border-color: $blue;
+      background: $blue;
+      
+      &::after {
+        content: "✓";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+      }
+    }
+  }
+  
+  text {
+    color: #111827;
+    font-size: 14px;
+  }
+}
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
 .btn.ghost { background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 12px; }
 .btn.primary { background: #002FA7; color: #fff; border-radius: 8px; padding: 6px 12px; }

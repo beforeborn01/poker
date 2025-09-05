@@ -51,7 +51,8 @@ interface IData {
       const safeMax = Math.min(sys.windowWidth, 480);
       const rawScale = sys.windowWidth / 414; // 以 iPhone 11 宽度为参考
       const clamped = Math.max(0.92, Math.min(1.08, rawScale));
-      this.setData({ maxWidth: safeMax, scale: clamped, skipRuleChange: getSkipRuleChangeTip() });
+      const skipTip = getSkipRuleChangeTip();
+      this.setData({ maxWidth: safeMax, scale: clamped, skipRuleChange: skipTip });
       // 回填已保存的配置
       const cfg = getConfig();
       this.setData({
@@ -147,7 +148,11 @@ interface IData {
     },
 
     confirmRuleChange() {
-      if (this.data.skipRuleChange) setSkipRuleChangeTip(true);
+      // 由于在toggleSkipRuleChange中已经保存了设置，这里不需要重复保存
+      // 但为了确保数据一致性，这里也保存一次
+      if (this.data.skipRuleChange) {
+        setSkipRuleChangeTip(true);
+      }
       this.setData({ showRuleChangeModal: false, loading: true });
       try { wx.removeStorageSync('deal-game-state:v1'); } catch {}
       wx.navigateTo({ url: '/pages/game/index' });
@@ -159,6 +164,9 @@ interface IData {
     },
 
     toggleSkipRuleChange() {
-      this.setData({ skipRuleChange: !this.data.skipRuleChange });
+      const newValue = !this.data.skipRuleChange;
+      this.setData({ skipRuleChange: newValue });
+      // 立即保存设置到存储
+      setSkipRuleChangeTip(newValue);
     }
   });
