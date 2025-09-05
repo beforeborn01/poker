@@ -11,6 +11,7 @@ export interface DealConfig {
 }
 
 const STORAGE_KEY = 'deal-config:v1';
+const TIP_KEY = 'deal-config:tip:skip';
 
 const DEFAULT_CONFIG: DealConfig = {
   deckCount: 1,
@@ -59,5 +60,12 @@ export function clearConfig() {
 }
 
 export const ConfigStorage = { getConfig, setConfig, clearConfig };
+
+export function getSkipRuleChangeTip(): boolean {
+  try { return Boolean(wx.getStorageSync(TIP_KEY)); } catch { return false; }
+}
+export function setSkipRuleChangeTip(skip: boolean) {
+  try { wx.setStorageSync(TIP_KEY, skip ? '1' : ''); } catch {}
+}
 
 

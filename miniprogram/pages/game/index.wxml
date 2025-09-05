@@ -1,0 +1,42 @@
+<view class="page" style="max-width: {{maxWidth}}px; --scale: {{scale}};">
+  <view class="header">
+    <view class="title">对局中</view>
+  </view>
+
+  <view class="arena">
+    <!-- 中心发牌区 -->
+    <view class="dealer" catchtap="deal">
+      <image class="card-back" src="{{cardBack}}" mode="aspectFit"></image>
+      <view class="remain">剩余 {{remain}} 张</view>
+      <button class="deal" catchtap="deal">发牌</button>
+    </view>
+
+    <!-- 玩家与历史堆渲染 -->
+    <block wx:for="{{players}}" wx:key="index">
+      <view class="player {{item.anchor}}" style="left: {{item.x}}%; top: {{item.y}}%; transform: translate(-50%, -50%);">
+        <view class="name">{{item.name}}</view>
+        <view class="pile small">
+          <block wx:for="{{item.pile}}" wx:key="index">
+            <view class="card face {{index===0 ? 'top' : ''}}" style="z-index: {{100-index}}; top: {{index * expose}}rpx;">
+              <view class="corner" style="height: {{cornerH}}rpx; line-height: {{cornerH}}rpx;">
+                <text class="suit {{(item.suit==='♥'||item.suit==='♦') ? 'red' : ''}}">{{item.suit}}</text>
+                <text class="rank {{(item.suit==='♥'||item.suit==='♦') ? 'red' : ''}}">{{item.rank}}</text>
+              </view>
+              <view class="corner br" style="height: {{cornerH}}rpx; line-height: {{cornerH}}rpx;">
+                <text class="suit {{(item.suit==='♥'||item.suit==='♦') ? 'red' : ''}}">{{item.suit}}</text>
+                <text class="rank {{(item.suit==='♥'||item.suit==='♦') ? 'red' : ''}}">{{item.rank}}</text>
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="footer-row">
+    <button class="secondary" bindtap="resetGame">重置对局</button>
+    <button class="primary" bindtap="backToSetup">返回配置</button>
+  </view>
+</view>
+
+

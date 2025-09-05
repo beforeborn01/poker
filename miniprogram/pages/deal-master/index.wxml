@@ -89,4 +89,19 @@
       开始游戏
     </button>
   </view>
+  
+  <!-- 规则变化提示（简易自定义弹层） -->
+  <view wx:if="{{showRuleChangeModal}}" class="modal-mask" catchtouchmove="true">
+    <view class="modal">
+      <view class="modal-title">提示</view>
+      <view class="modal-content">游戏规则变化，将会开始新的对局</view>
+      <label class="checkbox-row">
+        <checkbox checked="{{skipRuleChange}}" bindchange="toggleSkipRuleChange"/> 不再提示
+      </label>
+      <view class="modal-actions">
+        <button class="btn ghost" bindtap="cancelRuleChange">取消</button>
+        <button class="btn primary" bindtap="confirmRuleChange">继续</button>
+      </view>
+    </view>
+  </view>
 </view>

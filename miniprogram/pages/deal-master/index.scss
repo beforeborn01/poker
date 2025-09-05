@@ -261,6 +261,16 @@ $shadow: 0 6px 16px rgba(0,0,0,.06);
   .btn-icon { font-size: calc(18px * var(--scale, 1)); }
 }
 
+/* 简易弹层样式 */
+.modal-mask { position: fixed; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; z-index: 999; }
+.modal { width: 76%; background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+.modal-title { font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+.modal-content { color: #111827; margin-bottom: 12px; }
+.checkbox-row { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.btn.ghost { background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 12px; }
+.btn.primary { background: #16863a; color: #fff; border-radius: 8px; padding: 6px 12px; }
+
 /* 让 button 看起来更像纯容器 */
 button {
   margin: 0;

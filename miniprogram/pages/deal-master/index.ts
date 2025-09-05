@@ -1,5 +1,5 @@
 // pages/deal-master/index.ts
-import { ConfigStorage, getConfig, setConfig, DealConfig } from '../../utils/config';
+import { ConfigStorage, getConfig, setConfig, DealConfig, getSkipRuleChangeTip, setSkipRuleChangeTip } from '../../utils/config';
 interface IData {
     maxWidth: number;
     scale: number;
@@ -11,6 +11,8 @@ interface IData {
     reshuffle: boolean;
     loading: boolean;
     avatarUrl: string;
+    showRuleChangeModal?: boolean;
+    skipRuleChange?: boolean;
   }
   
   Page<IData, {
@@ -23,6 +25,10 @@ interface IData {
     decPerTime: () => void;
     setReshuffle: (e: WechatMiniprogram.TouchEvent) => void;
     startGame: () => void;
+    saveConfig: () => void;
+    confirmRuleChange: () => void;
+    cancelRuleChange: () => void;
+    toggleSkipRuleChange: () => void;
   }>({
     data: {
       maxWidth: 414, // iPhone 11 基准，启动时会根据屏幕宽度更新
@@ -34,7 +40,9 @@ interface IData {
       perTime: 1,
       reshuffle: false,
       loading: false,
-      avatarUrl: 'https://dummyimage.com/120x120/eeeeee/333333&text=%F0%9F%91%A8' // 占位头像，可替换
+      avatarUrl: 'https://dummyimage.com/120x120/eeeeee/333333&text=%F0%9F%91%A8', // 占位头像，可替换
+      showRuleChangeModal: false,
+      skipRuleChange: false
     },
   
     onLoad() {
@@ -43,7 +51,7 @@ interface IData {
       const safeMax = Math.min(sys.windowWidth, 480);
       const rawScale = sys.windowWidth / 414; // 以 iPhone 11 宽度为参考
       const clamped = Math.max(0.92, Math.min(1.08, rawScale));
-      this.setData({ maxWidth: safeMax, scale: clamped });
+      this.setData({ maxWidth: safeMax, scale: clamped, skipRuleChange: getSkipRuleChangeTip() });
       // 回填已保存的配置
       const cfg = getConfig();
       this.setData({
@@ -108,17 +116,49 @@ interface IData {
   
     startGame() {
       if (this.data.loading) return;
-      this.setData({ loading: true });
-  
-      // 模拟准备逻辑
-      setTimeout(() => {
+      const existing = wx.getStorageSync('deal-game-state:v1');
+      const skip = getSkipRuleChangeTip();
+      const currentCfg = getConfig();
+      let needConfirm = false;
+      try {
+        if (existing) {
+          const parsed = JSON.parse(existing);
+          if (parsed && parsed.cfg) {
+            const old = parsed.cfg as DealConfig;
+            const changed = old.deckCount !== currentCfg.deckCount ||
+              old.includeJokers !== currentCfg.includeJokers ||
+              old.playerCount !== currentCfg.playerCount ||
+              old.dealMode !== currentCfg.dealMode ||
+              old.perTime !== currentCfg.perTime ||
+              old.reshuffle !== currentCfg.reshuffle;
+            needConfirm = changed;
+          }
+        }
+      } catch {}
+
+      if (needConfirm && !skip) {
+        this.setData({ showRuleChangeModal: true });
+      } else {
+        this.setData({ loading: true });
+        try { wx.removeStorageSync('deal-game-state:v1'); } catch {}
+        wx.navigateTo({ url: '/pages/game/index' });
         this.setData({ loading: false });
-        wx.showToast({
-          title: '配置已保存，开始游戏！',
-          icon: 'success'
-        });
-        // 真实项目可 navigateTo 到游戏页面，并透传配置
-        // wx.navigateTo({ url: `/pages/game/index?cfg=${encodeURIComponent(JSON.stringify(this.data))}` })
-      }, 800);
+      }
+    },
+
+    confirmRuleChange() {
+      if (this.data.skipRuleChange) setSkipRuleChangeTip(true);
+      this.setData({ showRuleChangeModal: false, loading: true });
+      try { wx.removeStorageSync('deal-game-state:v1'); } catch {}
+      wx.navigateTo({ url: '/pages/game/index' });
+      this.setData({ loading: false });
+    },
+
+    cancelRuleChange() {
+      this.setData({ showRuleChangeModal: false });
+    },
+
+    toggleSkipRuleChange() {
+      this.setData({ skipRuleChange: !this.data.skipRuleChange });
     }
   });

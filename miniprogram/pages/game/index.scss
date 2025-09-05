@@ -1,0 +1,68 @@
+@use "sass:math";
+
+$green: #16863a;
+$border: #e5e7eb;
+$text: #1a1a1a;
+
+.page {
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #ffffff;
+  padding: calc(10px * var(--scale, 1)) calc(10px * var(--scale, 1)) calc(88px * var(--scale, 1));
+}
+
+.header {
+  position: relative;
+  padding: calc(env(safe-area-inset-top) + 12px) 0 calc(8px * var(--scale, 1));
+  text-align: center;
+  .title { font-weight: 700; font-size: calc(18px * var(--scale, 1)); color: $text; }
+}
+
+.arena {
+  position: relative;
+  height: calc(100vh - 180px);
+}
+
+.dealer {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  .card-back { width: 96px; height: 128px; border-radius: 10px; box-shadow: 0 6px 16px rgba(0,0,0,.12); }
+  .remain { color: $text; font-size: 14px; }
+  .deal { background: $green; color: #fff; height: 34px; border-radius: 999px; padding: 0 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; width: auto; min-width: unset; }
+}
+
+.player {
+  position: absolute;
+  width: 110px;
+  .name { text-align: center; color: $text; font-weight: 400; margin-bottom: 4px; }
+  .pile { position: relative; height: 100px; }
+  .pile.small { height: 90px; }
+  .card.face {
+    position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+    width: 72px; height: 96px; border: 1px solid $border; background: #fff; border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.1);
+    display: flex; align-items: flex-start; padding: 0 6px 6px 6px; overflow: hidden;
+  }
+  .card.top { z-index: 999; }
+  .corner { display: flex; align-items: center; gap: 4px; margin-top: 0; position: absolute; left: 6px; top: 0; }
+  .corner.br { right: 6px; bottom: 0; left: auto; top: auto; justify-content: flex-end; }
+  .suit { font-size: 14px; }
+  .rank { font-size: 16px; font-weight: 700; }
+  .suit.red, .rank.red { color: #e02424; }
+}
+
+.player.top { display: flex; flex-direction: column; align-items: center; }
+.player.bottom { display: flex; flex-direction: column; align-items: center; }
+.player.bottom .name { margin-bottom: 4px; }
+.player.middle { display: flex; flex-direction: column; align-items: center; }
+
+.footer-row {
+  position: sticky; bottom: 0; padding: 8px 0 12px; padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+  display: flex; justify-content: center; gap: 12px;
+  .primary, .secondary { height: 44px; border-radius: 999px; padding: 0 16px; width: auto; min-width: unset; }
+  .primary, .secondary { display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
+  .primary { background: $green; color: #fff; font-weight: 700; }
+  .secondary { border: 1px solid $border; background: #f3f4f6; color: $text; font-weight: 700; }
+}
+
+

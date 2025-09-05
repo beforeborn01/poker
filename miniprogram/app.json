@@ -1,6 +1,7 @@
 {
     "pages": [
-      "pages/deal-master/index"
+      "pages/deal-master/index",
+      "pages/game/index"
     ],
     "window": {
       "navigationBarTitleText": "扑克牌大师",
