@@ -1,6 +1,6 @@
 @use "sass:math";
 
-$green: #16863a;
+$blue: #002FA7;
 $border: #e5e7eb;
 $text: #1a1a1a;
 
@@ -25,23 +25,56 @@ $text: #1a1a1a;
 
 .dealer {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  .card-back { width: 96px; height: 128px; border-radius: 10px; box-shadow: 0 6px 16px rgba(0,0,0,.12); }
-  .remain { color: $text; font-size: 14px; }
-  .deal { background: $green; color: #fff; height: 34px; border-radius: 999px; padding: 0 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; width: auto; min-width: unset; }
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  .card-back { 
+    width: 96px; height: 128px; border-radius: 12px; 
+    box-shadow: 0 8px 24px rgba(0, 47, 167, 0.25), 0 4px 12px rgba(0,0,0,.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    &:active { transform: scale(0.98); }
+  }
+  .remain { 
+    color: $text; font-size: 14px; font-weight: 500;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px 12px;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 47, 167, 0.1);
+  }
+  .deal { 
+    background: linear-gradient(135deg, $blue 0%, #0038CC 100%);
+    color: #fff; height: 36px; border-radius: 999px; padding: 0 16px; 
+    font-weight: 700; display: inline-flex; align-items: center; justify-content: center; 
+    width: auto; min-width: unset;
+    box-shadow: 0 4px 12px rgba(0, 47, 167, 0.3);
+    transition: all 0.2s ease;
+    &:active { 
+      transform: translateY(1px);
+      box-shadow: 0 2px 8px rgba(0, 47, 167, 0.4);
+    }
+  }
 }
 
 .player {
   position: absolute;
   width: 110px;
-  .name { text-align: center; color: $text; font-weight: 400; margin-bottom: 4px; }
+  .name { 
+    text-align: center; color: $text; font-weight: 500; margin-bottom: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 8px;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(0, 47, 167, 0.1);
+    font-size: 13px;
+  }
   .pile { position: relative; height: 100px; }
   .pile.small { height: 90px; }
   .card.face {
     position: absolute; left: 50%; top: 0; transform: translateX(-50%);
-    width: 72px; height: 96px; border: 1px solid $border; background: #fff; border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,.1);
+    width: 72px; height: 96px; border: 1px solid $border; background: #fff; border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.08);
     display: flex; align-items: flex-start; padding: 0 6px 6px 6px; overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    &:hover { transform: translateX(-50%) translateY(-2px); }
   }
   .card.top { z-index: 999; }
   .corner { display: flex; align-items: center; gap: 4px; margin-top: 0; position: absolute; left: 6px; top: 0; }
@@ -64,7 +97,7 @@ $text: #1a1a1a;
 .pile-view { position: relative; height: 60vh; overflow-y: auto; margin-top: 8px; }
 .modal .card.face { position: absolute; left: 50%; transform: translateX(-50%); width: 90px; height: 120px; border: 1px solid $border; background: #fff; border-radius: 8px; box-shadow: 0 6px 14px rgba(0,0,0,.12); padding: 0 6px 6px 6px; }
 .modal-actions { display:flex; justify-content:center; margin-top: 12px; }
-.btn.primary { background: $green; color:#fff; border-radius: 999px; padding: 8px 16px; }
+.btn.primary { background: $blue; color:#fff; border-radius: 999px; padding: 8px 16px; }
 
 .player.top { display: flex; flex-direction: column; align-items: center; }
 .player.bottom { display: flex; flex-direction: column; align-items: center; }
@@ -72,12 +105,29 @@ $text: #1a1a1a;
 .player.middle { display: flex; flex-direction: column; align-items: center; }
 
 .footer-row {
-  position: sticky; bottom: 0; padding: 8px 0 12px; padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
-  display: flex; justify-content: center; gap: 12px;
-  .primary, .secondary { height: 44px; border-radius: 999px; padding: 0 16px; width: auto; min-width: unset; }
-  .primary, .secondary { display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
-  .primary { background: $green; color: #fff; font-weight: 700; }
-  .secondary { border: 1px solid $border; background: #f3f4f6; color: $text; font-weight: 700; }
+  position: sticky; bottom: 0; padding: 12px 0 16px; padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+  display: flex; justify-content: center; gap: 16px;
+  .primary, .secondary { 
+    height: 44px; border-radius: 999px; padding: 0 20px; width: auto; min-width: unset;
+    display: inline-flex; align-items: center; justify-content: center; line-height: 1;
+    font-weight: 700; transition: all 0.2s ease;
+  }
+  .primary { 
+    background: linear-gradient(135deg, $blue 0%, #0038CC 100%);
+    color: #fff; 
+    box-shadow: 0 4px 12px rgba(0, 47, 167, 0.3);
+    &:active { 
+      transform: translateY(1px);
+      box-shadow: 0 2px 8px rgba(0, 47, 167, 0.4);
+    }
+  }
+  .secondary { 
+    border: 1px solid $border; background: #f8fafc; color: $text;
+    &:active { 
+      background: #f1f5f9;
+      transform: translateY(1px);
+    }
+  }
 }
 
 

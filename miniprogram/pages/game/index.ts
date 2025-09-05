@@ -89,7 +89,7 @@ Page<IData, any>({
     remain: 0,
     players: [],
     currentIndex: 0,
-    cardBack: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="420"><rect width="100%" height="100%" rx="20" ry="20" fill="%2316863a"/><circle cx="150" cy="210" r="120" fill="none" stroke="%23fff" stroke-width="8"/></svg>',
+    cardBack: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="420"><rect width="100%" height="100%" rx="20" ry="20" fill="%23002FA7"/><circle cx="150" cy="210" r="120" fill="none" stroke="%23fff" stroke-width="8"/></svg>',
     expose: 8,
     cornerH: 30,
     cardScale: 1
@@ -156,7 +156,7 @@ Page<IData, any>({
     if (cfg.reshuffle) {
       // 重洗并清空历史堆
       const deck = buildDeck(cfg);
-      const players = this.data.players.map((p: PlayerState) => ({ ...p, pile: [] }));
+      const players = this.data.players.map((p: PlayerState) => Object.assign({}, p, { pile: [] }));
       this.setData({ deck, remain: deck.length, players, currentIndex: 0 });
     }
     saveState(this.data);
@@ -174,13 +174,13 @@ Page<IData, any>({
   },
 
   dealRound(per: number) {
-    let deck = [...this.data.deck];
-    const players = this.data.players.map((p: PlayerState) => ({ ...p }));
+    let deck = this.data.deck.slice();
+    const players = this.data.players.map((p: PlayerState) => Object.assign({}, p));
     let idx = this.data.currentIndex;
     for (let i = 0; i < per; i++) {
       if (deck.length === 0) break;
       const card = deck.pop() as Card;
-      players[idx].pile = [card, ...(players[idx].pile || [])];
+      players[idx].pile = [card].concat(players[idx].pile || []);
       players[idx].pileLimited = players[idx].pile.slice(0, 10);
     }
     idx = (idx + 1) % players.length;
@@ -188,13 +188,13 @@ Page<IData, any>({
   },
 
   dealSimultaneous(per: number) {
-    let deck = [...this.data.deck];
-    const players = this.data.players.map((p: PlayerState) => ({ ...p }));
+    let deck = this.data.deck.slice();
+    const players = this.data.players.map((p: PlayerState) => Object.assign({}, p));
     for (let k = 0; k < per; k++) {
       for (let i = 0; i < players.length; i++) {
         if (deck.length === 0) break;
         const card = deck.pop() as Card;
-        players[i].pile = [card, ...(players[i].pile || [])];
+        players[i].pile = [card].concat(players[i].pile || []);
         players[i].pileLimited = players[i].pile.slice(0, 10);
       }
     }

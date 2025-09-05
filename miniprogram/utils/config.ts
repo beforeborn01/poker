@@ -23,17 +23,17 @@ const DEFAULT_CONFIG: DealConfig = {
 };
 
 function sanitize(cfg: Partial<DealConfig>): DealConfig {
-  const player = Math.min(12, Math.max(1, Number(cfg.playerCount ?? DEFAULT_CONFIG.playerCount)));
-  const per = Math.min(10, Math.max(1, Number(cfg.perTime ?? DEFAULT_CONFIG.perTime)));
+  const player = Math.min(12, Math.max(1, Number(cfg.playerCount != null ? cfg.playerCount : DEFAULT_CONFIG.playerCount)));
+  const per = Math.min(10, Math.max(1, Number(cfg.perTime != null ? cfg.perTime : DEFAULT_CONFIG.perTime)));
   const deck = (cfg.deckCount === 2 ? 2 : 1) as 1 | 2;
   const mode: DealMode = cfg.dealMode === 'simultaneous' ? 'simultaneous' : 'round';
   return {
     deckCount: deck,
-    includeJokers: Boolean(cfg.includeJokers ?? DEFAULT_CONFIG.includeJokers),
+    includeJokers: Boolean(cfg.includeJokers != null ? cfg.includeJokers : DEFAULT_CONFIG.includeJokers),
     playerCount: player,
     dealMode: mode,
     perTime: per,
-    reshuffle: Boolean(cfg.reshuffle ?? DEFAULT_CONFIG.reshuffle),
+    reshuffle: Boolean(cfg.reshuffle != null ? cfg.reshuffle : DEFAULT_CONFIG.reshuffle),
   };
 }
 
@@ -50,7 +50,7 @@ export function getConfig(): DealConfig {
 
 export function setConfig(partial: Partial<DealConfig>): DealConfig {
   const current = getConfig();
-  const merged = sanitize({ ...current, ...partial });
+  const merged = sanitize(Object.assign({}, current, partial));
   try { wx.setStorageSync(STORAGE_KEY, JSON.stringify(merged)); } catch {}
   return merged;
 }
