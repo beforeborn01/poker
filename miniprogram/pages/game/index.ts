@@ -49,16 +49,16 @@ function buildDeck(cfg: DealConfig): Card[] {
 }
 
 function layoutFor(count: number): Array<{x:number,y:number}> {
-  // 预设布局（百分比）。中心(50,50)留发牌区
+  // 预设布局（百分比）。中心(50,50)留发牌区，按逆时针排列
   switch (count) {
     case 1: return [{x:50,y:18}];
     case 2: return [{x:50,y:18},{x:50,y:82}];
-    case 3: return [{x:50,y:18},{x:88,y:78},{x:12,y:78}];
-    case 4: return [{x:50,y:15},{x:88,y:50},{x:50,y:78},{x:12,y:50}];
-    case 5: return [{x:50,y:12},{x:88,y:40},{x:70,y:78},{x:30,y:78},{x:12,y:40}];
-    case 6: return [{x:50,y:12},{x:88,y:28},{x:88,y:60},{x:50,y:78},{x:12,y:60},{x:12,y:28}];
-    case 7: return [{x:50,y:12},{x:88,y:28},{x:88,y:54},{x:88,y:80},{x:12,y:80},{x:12,y:54},{x:12,y:28}];
-    case 8: return [{x:50,y:12},{x:88,y:28},{x:88,y:46},{x:88,y:64},{x:50,y:80},{x:12,y:64},{x:12,y:46},{x:12,y:28}];
+    case 3: return [{x:50,y:18},{x:12,y:78},{x:88,y:78}];
+    case 4: return [{x:50,y:15},{x:12,y:50},{x:50,y:78},{x:88,y:50}];
+    case 5: return [{x:50,y:12},{x:12,y:40},{x:30,y:78},{x:70,y:78},{x:88,y:40}];
+    case 6: return [{x:50,y:12},{x:12,y:28},{x:12,y:60},{x:50,y:78},{x:88,y:60},{x:88,y:28}];
+    case 7: return [{x:50,y:12},{x:12,y:28},{x:12,y:54},{x:12,y:80},{x:88,y:80},{x:88,y:54},{x:88,y:28}];
+    case 8: return [{x:50,y:12},{x:12,y:28},{x:12,y:46},{x:12,y:64},{x:50,y:80},{x:88,y:64},{x:88,y:46},{x:88,y:28}];
     default: return [];
   }
 }
