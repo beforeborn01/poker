@@ -6,10 +6,17 @@
   <view class="arena">
     <!-- 中心发牌区 -->
     <view class="dealer" catchtap="deal">
-      <image class="card-back" src="{{cardBack}}" mode="aspectFit"></image>
+      <image class="card-back {{isDealing ? 'dealing-animation' : ''}}" src="{{cardBack}}" mode="aspectFill"></image>
       <view class="remain">剩余 {{remain}} 张</view>
-      <button class="deal" catchtap="deal">发牌</button>
+      <button class="deal" catchtap="deal" disabled="{{isDealing}}">{{isDealing ? '发牌中...' : '发牌'}}</button>
     </view>
+    
+    <!-- 飞牌动画元素 -->
+    <block wx:for="{{flyingCards}}" wx:key="id">
+      <view class="flying-card flying" style="--target-x: {{item.targetX}}%; --target-y: {{item.targetY}}%;">
+        <image src="{{cardBack}}" mode="aspectFill" style="width: 100%; height: 100%; border-radius: 8px;"></image>
+      </view>
+    </block>
 
     <!-- 玩家与历史堆渲染 -->
     <block wx:for="{{players}}" wx:key="index">

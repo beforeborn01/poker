@@ -23,6 +23,39 @@ $text: #1a1a1a;
   height: calc(100vh - 180px);
 }
 
+.flying-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 96px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  pointer-events: none;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  
+  &.flying {
+    animation: flyCard 1s ease-out forwards;
+  }
+  
+  /* 为多张飞牌添加错开时间 */
+  &:nth-child(1) { animation-delay: 0ms; }
+  &:nth-child(2) { animation-delay: 150ms; }
+  &:nth-child(3) { animation-delay: 300ms; }
+  &:nth-child(4) { animation-delay: 450ms; }
+  &:nth-child(5) { animation-delay: 600ms; }
+  &:nth-child(6) { animation-delay: 750ms; }
+  &:nth-child(7) { animation-delay: 900ms; }
+  &:nth-child(8) { animation-delay: 1050ms; }
+  &:nth-child(9) { animation-delay: 1200ms; }
+  &:nth-child(10) { animation-delay: 1350ms; }
+  &:nth-child(11) { animation-delay: 1500ms; }
+  &:nth-child(12) { animation-delay: 1650ms; }
+}
+
 .dealer {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   display: flex; flex-direction: column; align-items: center; gap: 12px;
@@ -30,8 +63,15 @@ $text: #1a1a1a;
     width: 96px; height: 128px; border-radius: 12px; 
     box-shadow: 0 8px 24px rgba(0, 47, 167, 0.25), 0 4px 12px rgba(0,0,0,.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: transparent;
+    overflow: hidden;
     &:active { transform: scale(0.98); }
   }
+  
+  .dealing-animation {
+    animation: dealCard 1s ease-out forwards;
+  }
+  
   .remain { 
     color: $text; font-size: 14px; font-weight: 500;
     background: rgba(255, 255, 255, 0.9);
@@ -50,6 +90,14 @@ $text: #1a1a1a;
     &:active { 
       transform: translateY(1px);
       box-shadow: 0 2px 8px rgba(0, 47, 167, 0.4);
+    }
+    &:disabled {
+      background: #9ca3af;
+      box-shadow: 0 2px 6px rgba(156, 163, 175, 0.3);
+      cursor: not-allowed;
+      &:active {
+        transform: none;
+      }
     }
   }
 }
@@ -131,3 +179,33 @@ $text: #1a1a1a;
 }
 
 
+
+
+/* 发牌区动画 */
+@keyframes dealCard {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 飞牌动画 */
+@keyframes flyCard {
+  0% {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    left: var(--target-x, 50%);
+    top: var(--target-y, 50%);
+    transform: translate(-50%, -50%) scale(0.8) rotate(360deg);
+    opacity: 0;
+  }
+}

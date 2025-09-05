@@ -26,6 +26,8 @@ interface IData {
   showPileModal?: boolean;
   focusPlayer?: { name: string; pile: Card[] };
   cardScale: number; // 玩家区域卡片缩放
+  isDealing?: boolean; // 是否正在发牌动画
+  flyingCards?: Array<{id: string; targetX: number; targetY: number; playerName: string}>; // 飞牌列表
 }
 
 const STORAGE_KEY = 'deal-game-state:v1';
@@ -89,7 +91,7 @@ Page<IData, any>({
     remain: 0,
     players: [],
     currentIndex: 0,
-    cardBack: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="420"><rect width="100%" height="100%" rx="20" ry="20" fill="%23002FA7"/><circle cx="150" cy="210" r="120" fill="none" stroke="%23fff" stroke-width="8"/></svg>',
+    cardBack: '/assets/images/card-back.jpg',
     expose: 8,
     cornerH: 30,
     cardScale: 1
@@ -146,20 +148,76 @@ Page<IData, any>({
       wx.showToast({ title: '没有剩余牌', icon: 'none' });
       return;
     }
+    
+    // 如果正在动画中，不执行发牌
+    if (this.data.isDealing) {
+      return;
+    }
+    
+    // 开始发牌动画
+    this.setData({ isDealing: true });
+    
     const cfg = getConfig();
     this.setData({ cfg });
+    
+    // 创建飞牌动画数据
+    const flyingCards: Array<{id: string; targetX: number; targetY: number; playerName: string}> = [];
+    
     if (cfg.dealMode === 'simultaneous') {
-      this.dealSimultaneous(cfg.perTime);
+      // 同时发牌：给所有玩家发牌
+      for (let i = 0; i < cfg.perTime; i++) {
+        for (let j = 0; j < this.data.players.length; j++) {
+          const player = this.data.players[j];
+          flyingCards.push({
+            id: `card-${i}-${j}`,
+            targetX: player.x,
+            targetY: player.y,
+            playerName: player.name
+          });
+        }
+      }
     } else {
-      this.dealRound(cfg.perTime);
+      // 循环发牌：只给当前玩家发牌
+      const currentPlayer = this.data.players[this.data.currentIndex];
+      if (currentPlayer) {
+        for (let i = 0; i < cfg.perTime; i++) {
+          flyingCards.push({
+            id: `card-${i}`,
+            targetX: currentPlayer.x,
+            targetY: currentPlayer.y,
+            playerName: currentPlayer.name
+          });
+        }
+      }
     }
-    if (cfg.reshuffle) {
-      // 重洗并清空历史堆
-      const deck = buildDeck(cfg);
-      const players = this.data.players.map((p: PlayerState) => Object.assign({}, p, { pile: [] }));
-      this.setData({ deck, remain: deck.length, players, currentIndex: 0 });
-    }
-    saveState(this.data);
+    
+    // 显示飞牌动画
+    this.setData({ flyingCards });
+    
+    // 计算总动画时长：每张牌1秒 + 错开时间
+    const totalAnimationDuration = 1000 + (flyingCards.length - 1) * 150;
+    
+    // 动画结束后执行实际发牌逻辑并隐藏飞牌
+    setTimeout(() => {
+      if (cfg.dealMode === 'simultaneous') {
+        this.dealSimultaneous(cfg.perTime);
+      } else {
+        this.dealRound(cfg.perTime);
+      }
+      if (cfg.reshuffle) {
+        // 重洗并清空历史堆
+        const deck = buildDeck(cfg);
+        const players = this.data.players.map((p: PlayerState) => Object.assign({}, p, { pile: [] }));
+        this.setData({ deck, remain: deck.length, players, currentIndex: 0 });
+      }
+      saveState(this.data);
+      
+      // 动画结束，隐藏飞牌
+      this.setData({ 
+        isDealing: false,
+        flyingCards: []
+      });
+    }, totalAnimationDuration);
   },
 
   openPile(e: WechatMiniprogram.TouchEvent) {
